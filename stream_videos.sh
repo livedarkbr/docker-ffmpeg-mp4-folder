@@ -15,12 +15,12 @@ if [ -z "$YOUTUBE_STREAM_KEY" ]; then
 fi
 
 while true; do
-  echo "▶️ Enviando vídeo para o YouTube..."
   ffmpeg -re -stream_loop -1 -i "$VIDEO" \
-    -c:v libx264 -preset veryfast -maxrate 3000k -bufsize 6000k \
-    -g 50 -c:a aac -b:a 128k -ar 44100 \
+    -c:v libx264 -preset veryfast -tune zerolatency \
+    -maxrate 3000k -bufsize 6000k -g 50 -r 30 \
+    -c:a aac -b:a 128k -ar 44100 -ac 2 \
     -f flv "rtmp://a.rtmp.youtube.com/live2/$YOUTUBE_STREAM_KEY"
 
-  echo "🔁 ffmpeg finalizou. Reiniciando em 5 segundos..."
+  echo "⚠️ ffmpeg finalizou. Reiniciando em 5 segundos..."
   sleep 5
 done
